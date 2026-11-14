@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CosmoScope - NASA Near-Earth Object & Space Explorer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background: radial-gradient(circle at 50% 20%, #0d1322 0%, #05070d 100%);
+      min-height: 100vh;
+      color: #e2e8f0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+    .glass-card {
+      background: rgba(18, 24, 38, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8">
+  <div class="max-w-6xl mx-auto space-y-8">
+    
+    <!-- Header -->
+    <header class="flex flex-col md:flex-row justify-between items-center pb-6 border-b border-gray-800 gap-4">
+      <div>
+        <div class="flex items-center space-x-3">
+          <span class="text-3xl text-blue-400"><i class="fa-solid fa-shuttle-space"></i></span>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">CosmoScope</h1>
+          <span class="bg-blue-600/30 text-blue-400 text-xs px-2.5 py-1 rounded-full border border-blue-500/30 font-medium">NASA Space Apps 2026</span>
+        </div>
+        <p class="text-sm text-gray-400 mt-1">Real-Time Near-Earth Asteroid Tracker & Deep Space Explorer</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="https://github.com" target="_blank" class="px-4 py-2 text-xs font-semibold bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-lg border border-gray-700 flex items-center gap-2">
+          <i class="fa-brands fa-github"></i> Source Code
+        </a>
+        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-2 h-2 mr-2 bg-emerald-400 rounded-full animate-ping"></span> Live NASA Feed
+        </span>
+      </div>
+    </header>
+
+    <!-- Stat Highlights -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="glass-card p-5">
+        <div class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Total NEOs Today</div>
+        <div class="text-3xl font-bold text-white mt-2" id="stat-total">--</div>
+        <div class="text-xs text-gray-500 mt-1">NASA NeoWs API</div>
+      </div>
+      <div class="glass-card p-5">
+        <div class="text-xs text-amber-400 uppercase tracking-wider font-semibold">Potentially Hazardous</div>
+        <div class="text-3xl font-bold text-amber-400 mt-2" id="stat-hazardous">--</div>
+        <div class="text-xs text-gray-500 mt-1">Classified Hazard Rating</div>
+      </div>
+      <div class="glass-card p-5">
+        <div class="text-xs text-cyan-400 uppercase tracking-wider font-semibold">Closest Flyby Dist</div>
+        <div class="text-2xl font-bold text-cyan-400 mt-2 truncate" id="stat-closest">--</div>
+        <div class="text-xs text-gray-500 mt-1">Lunar Distance (LD)</div>
+      </div>
+      <div class="glass-card p-5">
+        <div class="text-xs text-purple-400 uppercase tracking-wider font-semibold">Max Relative Speed</div>
+        <div class="text-2xl font-bold text-purple-400 mt-2 truncate" id="stat-speed">--</div>
+        <div class="text-xs text-gray-500 mt-1">km / hour</div>
+      </div>
+    </section>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Asteroid Visualization Chart & List (2 cols) -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="glass-card p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-chart-simple text-blue-400"></i> Estimated Diameter vs Velocity
+            </h2>
+            <span class="text-xs text-gray-400">Today's Near-Earth Objects</span>
+          </div>
+          <div class="relative h-64 w-full">
+            <canvas id="asteroidChart"></canvas>
+          </div>
+        </div>
+
+        <div class="glass-card p-6">
+          <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-satellite text-blue-400"></i> Close Approach Log
+          </h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="text-xs text-gray-400 uppercase border-b border-gray-800">
+                <tr>
+                  <th class="pb-3">Asteroid Name</th>
+                  <th class="pb-3">Est. Size (m)</th>
+                  <th class="pb-3">Velocity (km/h)</th>
+                  <th class="pb-3">Miss Distance</th>
+                  <th class="pb-3">Status</th>
+                </tr>
+              </thead>
+              <tbody id="asteroid-table-body" class="divide-y divide-gray-800/60 text-gray-300">
+                <tr>
+                  <td colspan="5" class="py-6 text-center text-gray-500">Connecting to NASA NeoWs Server...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- NASA APOD Sidebar (1 col) -->
+      <div class="space-y-6">
+        <div class="glass-card p-6">
+          <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-camera-retro text-purple-400"></i> NASA APOD Feature
+          </h2>
+          <div id="apod-container" class="space-y-3">
+            <div class="w-full h-48 bg-gray-800/60 rounded-lg animate-pulse flex items-center justify-center text-xs text-gray-500">
+              Loading NASA APOD...
+            </div>
+            <h3 id="apod-title" class="font-bold text-sm text-gray-200">Loading daily astronomical picture...</h3>
+            <p id="apod-desc" class="text-xs text-gray-400 line-clamp-5 leading-relaxed">Please wait while we stream data from NASA Open APIs.</p>
+            <div class="pt-2 text-xs text-gray-500 flex justify-between items-center border-t border-gray-800">
+              <span id="apod-date">--</span>
+              <a id="apod-link" href="#" target="_blank" class="text-blue-400 hover:underline">HD View &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project & Mission Info Box -->
+        <div class="glass-card p-6 border-blue-500/20 bg-blue-950/20">
+          <h3 class="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-2">NASA Space Apps 2026 Submission</h3>
+          <p class="text-xs text-gray-300 leading-relaxed mb-3">
+            <strong>Challenge Theme:</strong> The Next Frontier<br>
+            <strong>Local Event:</strong> NIT Raipur<br>
+            <strong>Data Sources:</strong> NASA Open Data Portal (<code class="text-blue-300">api.nasa.gov</code>) using Near Earth Object Web Services (NeoWs) and Astronomy Picture of the Day (APOD).
+          </p>
+          <div class="text-[11px] text-gray-400 border-t border-gray-800 pt-3">
+            Built to provide accessible orbital hazard awareness and astronomical public science for educators and students.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-gray-500 pt-6 border-t border-gray-800">
+      <p>Submitted for NASA Space Apps Challenge 2026 – Raipur Local Event. Powered by NASA Open Data APIs.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    const NASA_API_KEY = 'DEMO_KEY';
+    const today = new Date().toISOString().split('T')[0];
+
+    async function fetchAPOD() {
+      try {
+        const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`);
+        if (!res.ok) throw new Error('APOD fetch failed');
+        const data = await res.json();
+        
+        const mediaHtml = data.media_type === 'video'
+          ? `<iframe src="${data.url}" class="w-full h-48 rounded-lg" frameborder="0" allowfullscreen></iframe>`
+          : `<img src="${data.url}" alt="${data.title}" class="w-full h-48 object-cover rounded-lg border border-gray-700/50 hover:opacity-95 transition">`;
+
+        document.getElementById('apod-container').firstElementChild.outerHTML = mediaHtml;
+        document.getElementById('apod-title').innerText = data.title;
+        document.getElementById('apod-desc').innerText = data.explanation;
+        document.getElementById('apod-date').innerText = data.date;
+        document.getElementById('apod-link').href = data.hdurl || data.url;
+      } catch (e) {
+        console.warn('APOD error:', e);
+        document.getElementById('apod-desc').innerText = 'Cosmic archive stream unavailable. Check connection.';
+      }
+    }
+
+    async function fetchNEO() {
+      try {
+        const res = await fetch(`https://api.nasa.gov/neo/rest/v1/feed?start_date=${today}&end_date=${today}&api_key=${NASA_API_KEY}`);
+        if (!res.ok) throw new Error('NEO fetch failed');
+        const data = await res.json();
+        
+        const asteroids = data.near_earth_objects[today] || [];
+        document.getElementById('stat-total').innerText = asteroids.length;
+
+        let hazardousCount = 0;
+        let minDistanceKm = Infinity;
+        let maxSpeedKmh = 0;
+
+        const tableBody = document.getElementById('asteroid-table-body');
+        tableBody.innerHTML = '';
+
+        const chartLabels = [];
+        const chartDiameters = [];
+        const chartVelocities = [];
+
+        asteroids.forEach((item, index) => {
+          const isHazardous = item.is_potentially_hazardous_asteroid;
+          if (isHazardous) hazardousCount++;
+
+          const closeData = item.close_approach_data[0] || {};
+          const missKm = closeData.miss_distance ? parseFloat(closeData.miss_distance.kilometers) : 0;
+          const missLd = closeData.miss_distance ? parseFloat(closeData.miss_distance.lunar) : 0;
+          const velocityKmh = closeData.relative_velocity ? parseFloat(closeData.relative_velocity.kilometers_per_hour) : 0;
+          const sizeEstM = item.estimated_diameter?.meters
+            ? Math.round((item.estimated_diameter.meters.estimated_diameter_min + item.estimated_diameter.meters.estimated_diameter_max) / 2)
+            : 0;
+
+          if (missLd > 0 && missLd < minDistanceKm) minDistanceKm = missLd;
+          if (velocityKmh > maxSpeedKmh) maxSpeedKmh = velocityKmh;
+
+          if (index < 10) {
+            chartLabels.push(item.name.replace(/[()]/g, ''));
+            chartDiameters.push(sizeEstM);
+            chartVelocities.push(Math.round(velocityKmh / 1000));
+          }
+
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-gray-800/30 transition';
+          row.innerHTML = `
+            <td class="py-3 font-medium text-white">${item.name}</td>
+            <td class="py-3 font-mono text-gray-300">${sizeEstM} m</td>
+            <td class="py-3 font-mono text-gray-300">${Math.round(velocityKmh).toLocaleString()}</td>
+            <td class="py-3 font-mono text-gray-300">${missLd.toFixed(2)} LD</td>
+            <td class="py-3">
+              <span class="px-2 py-0.5 rounded text-[11px] font-semibold ${isHazardous ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-emerald-500/10 text-emerald-400'}">
+                ${isHazardous ? 'Hazardous' : 'Nominal'}
+              </span>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+
+        document.getElementById('stat-hazardous').innerText = hazardousCount;
+        document.getElementById('stat-closest').innerText = minDistanceKm === Infinity ? '--' : minDistanceKm.toFixed(2) + ' LD';
+        document.getElementById('stat-speed').innerText = Math.round(maxSpeedKmh).toLocaleString();
+
+        renderChart(chartLabels, chartDiameters, chartVelocities);
+      } catch (e) {
+        console.error('NEO error:', e);
+        document.getElementById('asteroid-table-body').innerHTML = `
+          <tr><td colspan="5" class="py-4 text-center text-red-400">Failed to stream NeoWs data. Demo key limit or network issue.</td></tr>
+        `;
+      }
+    }
+
+    function renderChart(labels, diameters, velocities) {
+      const ctx = document.getElementById('asteroidChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Avg Diameter (meters)',
+              data: diameters,
+              backgroundColor: 'rgba(59, 130, 246, 0.65)',
+              borderColor: 'rgba(59, 130, 246, 1)',
+              borderWidth: 1,
+              yAxisID: 'y'
+            },
+            {
+              label: 'Velocity (1000 km/h)',
+              data: velocities,
+              backgroundColor: 'rgba(168, 85, 247, 0.65)',
+              borderColor: 'rgba(168, 85, 247, 1)',
+              borderWidth: 1,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#94a3b8', boxWidth: 12 } }
+          },
+          scales: {
+            x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { display: false } },
+            y: {
+              type: 'linear',
+              position: 'left',
+              ticks: { color: '#3b82f6' },
+              grid: { color: 'rgba(255,255,255,0.05)' }
+            },
+            y1: {
+              type: 'linear',
+              position: 'right',
+              ticks: { color: '#a855f7' },
+              grid: { drawOnChartArea: false }
+            }
+          }
+        }
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchAPOD();
+      fetchNEO();
+    });
+  </script>
+</body>
+</html>

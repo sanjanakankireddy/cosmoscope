@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CosmoScope - NASA Space Apps 2026 Presentation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @media print {
+      .slide { page-break-after: always; height: 100vh; }
+      body { background: white !important; color: black !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 p-8 flex flex-col items-center space-y-12 font-sans">
+
+  <!-- Slide 1: Title -->
+  <div class="slide w-full max-w-4xl min-h-[500px] border border-slate-800 rounded-2xl p-12 bg-slate-900/80 flex flex-col justify-between shadow-2xl">
+    <div>
+      <span class="text-blue-400 font-semibold text-sm uppercase tracking-widest">NASA Space Apps Challenge 2026</span>
+      <h1 class="text-5xl font-black text-white mt-4">CosmoScope</h1>
+      <p class="text-xl text-slate-400 mt-3">Near-Earth Asteroid & Deep Space Telemetry Monitor</p>
+    </div>
+    <div class="border-t border-slate-800 pt-6 flex justify-between items-end text-sm text-slate-400">
+      <div>
+        <p><strong>Theme:</strong> The Next Frontier</p>
+        <p><strong>Local Event:</strong> NIT Raipur</p>
+      </div>
+      <p class="text-blue-400 font-medium">Slide 1 of 5</p>
+    </div>
+  </div>
+
+  <!-- Slide 2: The Problem -->
+  <div class="slide w-full max-w-4xl min-h-[500px] border border-slate-800 rounded-2xl p-12 bg-slate-900/80 flex flex-col justify-between shadow-2xl">
+    <div>
+      <span class="text-red-400 font-semibold text-sm uppercase tracking-widest">01 / The Challenge</span>
+      <h2 class="text-3xl font-bold text-white mt-4">Planetary Defense & Public Situational Awareness</h2>
+      <ul class="space-y-4 mt-6 text-slate-300 text-lg list-disc list-inside">
+        <li>Thousands of Near-Earth Objects (NEOs) pass close to Earth's orbit every year.</li>
+        <li>Raw astronomical orbital data is complex, fragmented, and hard for the general public and students to interpret.</li>
+        <li>There is a critical need for intuitive, real-time visualization of potential impact hazards.</li>
+      </ul>
+    </div>
+    <div class="border-t border-slate-800 pt-6 text-right text-sm text-slate-400">
+      <p class="text-blue-400 font-medium">Slide 2 of 5</p>
+    </div>
+  </div>
+
+  <!-- Slide 3: The Solution -->
+  <div class="slide w-full max-w-4xl min-h-[500px] border border-slate-800 rounded-2xl p-12 bg-slate-900/80 flex flex-col justify-between shadow-2xl">
+    <div>
+      <span class="text-emerald-400 font-semibold text-sm uppercase tracking-widest">02 / The Solution</span>
+      <h2 class="text-3xl font-bold text-white mt-4">CosmoScope Web Telemetry Dashboard</h2>
+      <div class="grid grid-cols-2 gap-6 mt-6">
+        <div class="p-5 bg-slate-800/50 rounded-xl border border-slate-700/50">
+          <h3 class="font-bold text-white text-lg">🛰️ Real-Time Ingestion</h3>
+          <p class="text-sm text-slate-300 mt-2">Automatically streams daily asteroid flyby telemetry from NASA's NeoWs API.</p>
+        </div>
+        <div class="p-5 bg-slate-800/50 rounded-xl border border-slate-700/50">
+          <h3 class="font-bold text-white text-lg">⚠️ Hazard Indexing</h3>
+          <p class="text-sm text-slate-300 mt-2">Calculates miss-distance in Lunar Distance (LD) units and categorizes impact risks.</p>
+        </div>
+        <div class="p-5 bg-slate-800/50 rounded-xl border border-slate-700/50">
+          <h3 class="font-bold text-white text-lg">📊 Dynamic Telemetry Charts</h3>
+          <p class="text-sm text-slate-300 mt-2">Interactive visual comparisons between asteroid diameter (meters) and velocity (km/h).</p>
+        </div>
+        <div class="p-5 bg-slate-800/50 rounded-xl border border-slate-700/50">
+          <h3 class="font-bold text-white text-lg">🔭 Daily APOD Discovery</h3>
+          <p class="text-sm text-slate-300 mt-2">Features NASA's daily high-resolution deep space imagery and scientific context.</p>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-6 text-right text-sm text-slate-400">
+      <p class="text-blue-400 font-medium">Slide 3 of 5</p>
+    </div>
+  </div>
+
+  <!-- Slide 4: NASA Data & Tech -->
+  <div class="slide w-full max-w-4xl min-h-[500px] border border-slate-800 rounded-2xl p-12 bg-slate-900/80 flex flex-col justify-between shadow-2xl">
+    <div>
+      <span class="text-blue-400 font-semibold text-sm uppercase tracking-widest">03 / Data & Architecture</span>
+      <h2 class="text-3xl font-bold text-white mt-4">NASA Open Data Integration</h2>
+      <div class="mt-6 space-y-4 text-slate-300">
+        <p><strong>NASA NeoWs REST API:</strong> Powers real-time asteroid diameter, velocity, and trajectory coordinates.</p>
+        <p><strong>NASA APOD API:</strong> Provides verified scientific metadata and high-definition imagery.</p>
+        <p><strong>Architecture:</strong> Zero-dependency frontend architecture ensuring 100% uptime, fast response times, and zero server hosting overhead.</p>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-6 text-right text-sm text-slate-400">
+      <p class="text-blue-400 font-medium">Slide 4 of 5</p>
+    </div>
+  </div>
+
+  <!-- Slide 5: Conclusion & Future -->
+  <div class="slide w-full max-w-4xl min-h-[500px] border border-slate-800 rounded-2xl p-12 bg-slate-900/80 flex flex-col justify-between shadow-2xl">
+    <div>
+      <span class="text-purple-400 font-semibold text-sm uppercase tracking-widest">04 / The Next Frontier</span>
+      <h2 class="text-3xl font-bold text-white mt-4">Future Vision & Impact</h2>
+      <ul class="space-y-4 mt-6 text-slate-300 text-lg list-disc list-inside">
+        <li>Integration with 3D WebGL / CesiumJS to project 3D orbital trajectory simulations.</li>
+        <li>Automated alert notifications for rare ultra-close asteroid approaches.</li>
+        <li>Educational modules for schools and universities to explore NASA planetary science.</li>
+      </ul>
+    </div>
+    <div class="border-t border-slate-800 pt-6 flex justify-between text-sm text-slate-400">
+      <p>Thank You! Built for NASA Space Apps Challenge 2026</p>
+      <p class="text-blue-400 font-medium">Slide 5 of 5</p>
+    </div>
+  </div>
+
+</body>
+</html>
